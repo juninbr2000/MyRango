@@ -28,7 +28,7 @@ git clone https://github.com/seu-usuario/delivery-app.git
 cd delivery-app
 ```
 
-🔹 Backend
+### 🔹 Backend
 Entrar na pasta do backend:
 
 ```bash
@@ -48,7 +48,11 @@ Crie um arquivo .env na pasta backend/ com:
 MONGO_URI=sua_string_do_mongodb
 JWT_SECRET=umseguroaleatorio
 ```
-O servidor roda na porta 3000, mas pode ser alterado
+O servidor roda na porta 3000, mas caso queira, basta adicionar uma porta ao .env:
+
+```
+PORT=1234
+```
 
 Rodar o servidor:
 
@@ -58,7 +62,7 @@ npm run dev
 
 👉 API disponível em http://localhost:3000
 
-🔹 Frontend
+### 🔹 Frontend
 Entrar na pasta do frontend:
 
 ```bash
@@ -88,7 +92,7 @@ npm run dev
 
 ---
 
-🛒 Funcionalidades
+## 🛒 Funcionalidades
  Cadastro e login com validação de CPF
 
  Endereços (criar, visualizar e excluir)
@@ -98,15 +102,16 @@ npm run dev
  Finalização de pedido (endereço + botao para simular o pagamento)
 
  Histórico de pedidos com status e total gasto
+---
 
 
-📌 Melhorias Futuras
+## 📌 Melhorias Futuras
 Integração com gateway de pagamento real
 
 Dashboard para restaurante acompanhar pedidos
+---
 
-👨‍💻 Autor
+## 👨‍💻 Autor
+
 Desenvolvido por Edson Junior 🚀
-
-
 ---
