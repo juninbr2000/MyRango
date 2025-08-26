@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.menuList {
+  @apply flex gap-2 items-center justify-center mt-2 px-5 py-3 text-black hover:bg-zinc-200 transition-all duration-500 rounded w-full
+}
+.menuList svg{
+  @apply text-orange-600
+}
+
+@media (prefers-color-scheme: light) {
+
+}

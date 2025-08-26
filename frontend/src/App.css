@@ -1,0 +1,31 @@
+#root {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+}
+
+.screen-container{
+  background: linear-gradient(#000000bc, #00000000, #000000bc),
+  url('./assets/bg-image.jpg');
+  min-height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.card {
+  background: linear-gradient(#000000bc, #00000000, #000000bc),
+            url('/jonathan-borba-8l8Yl2ruUsg-unsplash.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
