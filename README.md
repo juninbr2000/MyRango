@@ -13,10 +13,12 @@ O usuário pode se cadastrar, logar, adicionar/remover itens do carrinho, escolh
 ---
 
 ## 📂 Estrutura do Projeto
+```
 delivery-app/
 │── frontend/ # Aplicação React (UI)
 │── backend/ # API RESTful (Express + MongoDB)
 └── README.md
+```
 
 ---
 
@@ -102,6 +104,7 @@ npm run dev
  Finalização de pedido (endereço + botao para simular o pagamento)
 
  Histórico de pedidos com status e total gasto
+
 ---
 
 
@@ -109,9 +112,11 @@ npm run dev
 Integração com gateway de pagamento real
 
 Dashboard para restaurante acompanhar pedidos
+
 ---
 
 ## 👨‍💻 Autor
 
 Desenvolvido por Edson Junior 🚀
+
 ---
