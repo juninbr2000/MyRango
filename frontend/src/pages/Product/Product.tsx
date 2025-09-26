@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useFetchDocuments } from '../../Hooks/usefetchDocuments'
 import Navbar from '../../components/layout/Navbar'
 import type { ProductFullData } from '../../types/ProductsTypes'
@@ -12,6 +12,7 @@ function Product() {
 
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState("")
+    const navigate = useNavigate()
 
     if (loading) {
         return (
@@ -48,6 +49,8 @@ function Product() {
       observation:note ,
       imageUrl: product.imageUrl
     })
+    
+    navigate('/')
 
   }
 

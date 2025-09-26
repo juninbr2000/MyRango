@@ -46,7 +46,7 @@ function AddressView() {
     <div className='bg-zinc-200 w-screen h-screen pt-16'>
         <Navbar />
         <div className='px-4 py-8 flex flex-col gap-8'> 
-            {address ? address.map((local: Address) => (
+            {address && address.length > 0 ? address.map((local: Address) => (
                 <div className='flex bg-white text-black rounded-md p-4 items-center justify-center gap-2' key={local._id}>
                     <p className='text-orange-600 text-3xl'><FiMapPin /></p>
                     <div>
@@ -59,6 +59,9 @@ function AddressView() {
                     </div>
                 </div>
             )) : (
+                <p>Voce ainda nao adicionou nenhum endereço</p>
+            )}
+            {!address && (
                 <p>Voce ainda nao adicionou nenhum endereço</p>
             )}
             <MainButton title='Adicionar Endereço' onPress={()=> {navigate('/address/create')}} classe='primary' type='button' />

@@ -18,7 +18,7 @@ export default function CheckoutPage() {
   const {user} = useAuth()
   const {docs, clear} = useDocumentStorage('cart')
   const {document ,loading} = useFetchDocuments<Address[]>('Address', user?.user._id, user?.token )
-  const { createDoc, loading: loadingCr } = useCreateDocument('order', user?.token)
+  const { createDoc, loading: loadingCr } = useCreateDocument('order', user?.token || "")
 
   const total = docs.reduce((sum, item) => sum + item.price * item.amount, 0)
 
@@ -40,7 +40,7 @@ export default function CheckoutPage() {
     const data ={
       addressId: selectedAddress,
       paymentMethod,
-      products: cart.map((item: any) => ({
+      products: cart!.map((item: any) => ({
         product: item._id,
         quantity: item.amount
       }))

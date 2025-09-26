@@ -12,6 +12,7 @@ import CreateAddress from './pages/address/CreateAddress'
 import CartView from './pages/cart/CartView'
 import UserOrder from './pages/order/UserOrder'
 import CheckoutPage from './pages/cart/CheckoutPage'
+import Dashboard from './pages/Dashboard/Dashboard'
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
       <Route path='/order' element={user ? <UserOrder /> : <Login />} />
       <Route path='/login' element={!user ? <Login /> : <Home/> } />
       <Route path='/register' element={!user ? <Register /> : <Home/> } />
+      <Route path='/dashboard' element={!user ? <Login /> : <Dashboard/> } />
     </Routes>
   )
 }

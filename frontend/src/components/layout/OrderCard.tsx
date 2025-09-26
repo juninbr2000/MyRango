@@ -3,10 +3,12 @@ import type { Order } from "../../types/OrderTypes"
 
 interface Props {
   order: Order,
-  simulatePayment: (id: string) => void
+  simulatePayment: (id: string) => void,
+  dashboard?: boolean,
+  productStatus?: (id: string, status: string) => void
 }
 
-export const OrderCard: React.FC<Props> = ({ order, simulatePayment }) => {
+export const OrderCard: React.FC<Props> = ({ order, simulatePayment, dashboard, productStatus }) => {
   const date = new Date(order.createdAt).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -84,6 +86,21 @@ export const OrderCard: React.FC<Props> = ({ order, simulatePayment }) => {
           Total: R$ {order.totalPrice.toFixed(2)}
         </p>
       </div>
+      {dashboard === true && (
+        <div className="flex justify-center gap-4">
+          {order.ProductStatus === 'pending' ? (
+            <button className="bg-orange-600 px-4 rounded py-1" onClick={() => productStatus && productStatus(order._id, 'processing')}>Processando</button>
+          ) : ( order.ProductStatus === 'processing' ? (
+            <button className="bg-orange-600 px-4 rounded py-1" onClick={() => productStatus && productStatus(order._id, 'shipped')}>Enviado</button>
+          ) : (
+            <button className="bg-orange-600 px-4 rounded py-1" onClick={() => productStatus && productStatus(order._id, 'delivered')}>Entregue</button>
+          ))}
+
+          {(order.ProductStatus !== 'delivered' && order.ProductStatus !== 'shipped') && (
+            <button className="bg-red-600 px-4 rounded py-1" onClick={() => productStatus && productStatus(order._id, 'cancelled')}>Cancelar</button>
+          )} 
+        </div>
+      )}
       {order.paymentStatus === 'pending' && <button className="bg-orange-600 px-4 rounded py-1" onClick={() => simulatePayment(order._id)} >Simular pagamento</button>}
     </div>
   )
