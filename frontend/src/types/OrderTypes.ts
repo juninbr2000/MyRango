@@ -3,6 +3,11 @@ import type { ProductOrder } from "./ProductsTypes"
 
 export interface Order {
   _id: string
+  user: {
+    name: string,
+    phone: string,
+    _id: string
+  }
   ProductStatus: string
   paymentMethod: string
   paymentStatus: string

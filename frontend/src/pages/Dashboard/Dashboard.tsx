@@ -11,29 +11,29 @@ const API_URL = import.meta.env.VITE_API_URL;
 function Dashboard() {
     const [orders, setOrder] = useState<Order[]>([])
     const {user} = useAuth()
-
+    
     const {document, loading} = useFetchDocuments<Order[]>('order/all', '', user?.token)
-
+    
     console.log(document)
-
+    
     useEffect(() => {
-        if(document){
-            setOrder(document)
-        }
+      if(document){
+        setOrder(document)
+      }
     }, [document])
-
+    
     const ProductStatus = async (id: string, status: string) => {
       try{
         await axios.put(`${API_URL}order/${id}`, {ProductStatus: status}, {headers: {Authorization: user?.token}})
 
         setOrder((prev) =>
           prev.map((o) => (o._id === id ? { ...o, ProductStatus: status } : o))
-        );
-      } catch(error: any){
-        console.error(error)
-      }
+      );
+    } catch(error: any){
+      console.error(error)
     }
-    
+  }
+  
   return (
     <div className="min-h-screen max-w-screen bg-zinc-200 pt-16">
         <Navbar />

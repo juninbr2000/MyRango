@@ -39,7 +39,7 @@ export const OrderCard: React.FC<Props> = ({ order, simulatePayment, dashboard, 
           order.paymentStatus === 'pending' ? 'Aguardando Pagamento' : 'Pendente' }
         </span>
       </div>
-
+      
       <p className="text-sm text-gray-500 ">Pedido em: {date}</p> 
       <p className="text-sm text-gray-500 mb-2">Ultima atualização: {new Date(order.updatedAt).toLocaleDateString("pt-BR", {
     day: "2-digit",
@@ -50,6 +50,12 @@ export const OrderCard: React.FC<Props> = ({ order, simulatePayment, dashboard, 
   })}</p> 
 
       <div className="mb-3">
+        {dashboard && (
+          <>
+          <h3 className="font-bold text-lg text-gray-800">{order.user.name}</h3>
+          <p className="text-gray-700 text-sm">{order.user.phone}</p>
+          </>
+        )}
         <p className="text-sm font-semibold text-gray-700">Endereço:</p>
         {order.address ? <p className="text-sm text-gray-600">
           {order.address.rua}, {order.address.complemento} - {order.address.bairro}{" "}

@@ -117,8 +117,12 @@ exports.getAllOrders = async (req, res) => {
 
         if(!userId) return res.status(401).json({error: "Autenticação necessaria!"})
         if(!isAdmin) return res.status(403).json({error: "Somente administradores podem fazer essa soliciatação"})
-        
-        const orders = await Order.find({paymentStatus: 'paid', ProductStatus: {$in: ['pending', 'processing', 'shipped', 'delivered']}}).sort({createdAt: -1}).populate('address')
+    
+        const orders = await Order.find({
+            paymentStatus: 'paid', 
+            ProductStatus: {$in: ['pending', 'processing', 'shipped', 'delivered']}})
+            .sort({createdAt: -1})
+            .populate('address').populate('user', '-password -cpf -role')
 
         res.status(200).json(orders)
     } catch (error) {
