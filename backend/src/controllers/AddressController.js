@@ -37,7 +37,7 @@ exports.getAddress = async (req, res) => {
         const address = await Address.find({createdBy: userId})
 
         if(address.length === 0){
-            return res.status(200).json({message: 'Nenhum endereço foi adicionado!'})
+            return res.status(200).json({})
         }
 
         res.status(200).json(address)

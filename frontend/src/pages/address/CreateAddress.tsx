@@ -21,11 +21,11 @@ function CreateAddress() {
     const [number, setNumber] = useState('')
     const [rua, setRua] = useState('')
     const [referencia, setReferencia] = useState('')
-    const [errors, setErrors] = useState('')
+    const [errors, setErrors] = useState<string>('')
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if(!cep || !city || !bairro || !rua) {
+        if(!cep || !city || !bairro || !rua || !number) {
             setErrors('Preencha todos os campos')
             return
         }
@@ -41,13 +41,18 @@ function CreateAddress() {
             }
 
             const res = await createDoc(data)
+            console.log(res)
 
             if(res){
                 navigate('/address')
             }
             
         } catch (error: any) {
-            setErrors(error)
+            const msg =
+                error?.response?.data?.error ||
+                error?.message ||
+                "Erro ao criar o endereço"
+            setErrors(msg)
             console.error(error)
         }
     }
@@ -61,6 +66,7 @@ function CreateAddress() {
     useEffect(() => {
         if(error){
             setErrors(error)
+            console.log(error)
         }
     }, [error ,loading])
 
@@ -74,7 +80,7 @@ function CreateAddress() {
                 <InputText title='Cidade' placeholder='Digite sua cidade' type='text' value={city} setValue={setCity} />
                 <InputText title='Bairro' placeholder='Digite seu bairro' type='text' value={bairro} setValue={setBairro} autoComplete='address-level3' />
                 <InputText title='Rua' placeholder='Digite sua Rua' type='text' value={rua} setValue={setRua} autoComplete='address-line1' />
-                <InputText title='Complemento' placeholder='EX: Apt.2, 3º andar...' type='text' value={number} setValue={setNumber} autoComplete='address-line2' />
+                <InputText title='Numero' placeholder='EX: Apt.2, 3º andar...' type='text' value={number} setValue={setNumber} autoComplete='address-line2' />
                 <InputText title='Referencia' placeholder='Digite algo para ajudar a achar sua casa' type='text' value={referencia} setValue={setReferencia} />
                 <p className='font-semibold text-sm text-red-500'>{errors}</p>
                 <MainButton title={loading ? 'Aguarde...' :'Criar'} type='submit' classe='primary' disabled={loading}/>

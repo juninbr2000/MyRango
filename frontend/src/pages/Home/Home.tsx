@@ -37,9 +37,10 @@ function Home() {
           </p>
         </div>
 
-        <h1 className="mt-6 font-bold text-xl sm:text-2xl text-start text-black">
-          O que você vai pedir hoje
+        <h1 className="mt-6 font-bold text-2xl sm:text-3xl text-start text-black">
+          Nosso Cardápio
         </h1>
+        <p className='text-md text-left text-zinc-500'>Escolha seu lanche favorito e faça o seu pedido</p>
 
         {/* Grid responsivo de produtos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4">

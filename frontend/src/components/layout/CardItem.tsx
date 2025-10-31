@@ -6,38 +6,29 @@ function CardItem({ title, description, price, imageUrl, _id }: ProductData) {
   return (
     <Link
       to={`/${_id}`}
-      className="flex flex-col sm:flex-row bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+      className="border border-zinc-300 rounded-md bg-white hover:border-orange-500 hover:shadow-xl transition-all"
     >
-      {/* Imagem */}
       {imageUrl ? (
-        <img
-          src={imageUrl}
-          alt={title}
-          className="w-full sm:w-32 h-48 sm:h-32 object-cover"
-        />
+        <img src={imageUrl} alt={title} className='h-52 w-full object-cover rounded-t-sm' />
       ) : (
-        <div className="w-full sm:w-32 h-48 sm:h-32 bg-zinc-300 flex items-center justify-center text-zinc-600">
+        <div className='bg-red-100 flex items-center justify-center h-52 rounded-t-sm text-orange-500'>
           <MdHideImage size={32} />
         </div>
       )}
-
-      {/* Conteúdo */}
-      <div className="flex flex-col flex-1 px-4 py-3 justify-between">
-        <div>
-          <h2 className="font-semibold text-lg text-zinc-800 line-clamp-2 sm:line-clamp-1">
-            {title}
-          </h2>
-          <p className="font-light text-sm text-zinc-500 line-clamp-3 sm:line-clamp-2">
-            {description}
+      <div className='p-7'>
+        <h2 className='text-black text-left text-xl font-bold mb-2'>
+          {title}
+        </h2>
+        <p className='text-zinc-400 text-left text-sm mb-4'>
+          {description}
+        </p>
+        <div className='flex flex-row items-center justify-between'>
+          <p className='text-orange-500 font-bold text-2xl'>
+            {price.toLocaleString('pt-br', {style: 'currency', currency: "BRL"})}
           </p>
-        </div>
-        <div className="mt-2">
-          <span className="font-bold text-lg text-orange-600">
-            {price.toLocaleString('pt-br', {
-              style: 'currency',
-              currency: 'BRL',
-            })}
-          </span>
+          <button className='bg-orange-500 text-md font-semibold px-4 py-2 rounded'>
+            Adicionar
+          </button>
         </div>
       </div>
     </Link>

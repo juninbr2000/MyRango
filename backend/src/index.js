@@ -6,7 +6,7 @@ require('dotenv').config()
 const app = express()
 app.use(cors(
   {origin: [
-    "http://192.168.0.110:5173",
+    "http://192.168.0.111:5173",
     "http://localhost:5173"
     ]
   }

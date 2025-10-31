@@ -7,6 +7,7 @@ import { useAuth } from "../../context/authContext"
 import type { CartItem } from "../../types/OrderTypes"
 import { useNavigate } from "react-router-dom"
 import { useCreateDocument } from "../../Hooks/useCreateDocument"
+import MainButton from "../../components/ui/MainButton"
 
 export default function CheckoutPage() {
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null)
@@ -72,7 +73,7 @@ export default function CheckoutPage() {
         {/* Endereço */}
         <section className="bg-white p-4 rounded-xl shadow">
           <h2 className="text-lg font-semibold mb-2">Endereço de Entrega</h2>
-          {addresses.map((addr) => (
+          {addresses.length > 0 ? addresses.map((addr) => (
             <label
               key={addr._id}
               className="flex items-center gap-2 p-2 border rounded-lg mb-2 cursor-pointer hover:bg-zinc-50"
@@ -88,7 +89,13 @@ export default function CheckoutPage() {
                 {addr.rua}, {addr.complemento} - {addr.cidade} ({addr.cep})
               </span>
             </label>
-          ))}
+          )): (
+            <div className="flex items-center flex-col gap-2">
+              <p>Você ainda não adicionou nenhum endereço</p>
+              <MainButton title="adicionar endereço" classe="primary" type="button" onPress={() => navigate('/address/create')} />
+            </div>
+          )}
+          
         </section>
 
         {/* Pagamento */}
