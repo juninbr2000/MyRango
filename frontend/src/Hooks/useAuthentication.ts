@@ -16,18 +16,19 @@ export const useAuthentication = () => {
   }
 
   const createUser = async (data: UserData): Promise<UserResponse | void> => {
+    console.log('inicio')
     if (checkIfIsCancelled()) return;
     
     setError(null);
     setLoading(true);
-    
+    console.log('antes do try')
     try {
       const res = await axios.post<UserResponse>(
         `${API_URL}user/register`, 
         data
       )
-      
-      console.log(res.data)
+      console.log('no try')
+      console.log(res)
       return res.data;
     } catch (err) {
       const axiosError = err as AxiosError<{ error: string }>;
@@ -43,12 +44,14 @@ export const useAuthentication = () => {
   
   
   const login = async (data: loginData) => {
+    console.log('chamou o login')
     checkIfIsCancelled()
     
     setError(null)
     setLoading(true)
     
     try{
+      console.log('try do login')
       const res = await axios.post(`${API_URL}user/login`, data)
       
       console.log(res.data)
@@ -70,6 +73,7 @@ export const useAuthentication = () => {
   }
 
   useEffect(() => {
+    setCancelled(false)
     return () => setCancelled(true);
   }, []);
   

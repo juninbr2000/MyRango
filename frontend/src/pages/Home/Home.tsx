@@ -4,8 +4,9 @@ import { useFetchDocuments } from '../../Hooks/usefetchDocuments'
 import CardItem from '../../components/layout/CardItem'
 import type { ProductFullData } from '../../types/ProductsTypes'
 import { useDocumentStorage } from '../../Hooks/useDocumentStorage'
-import { MdOutlineShoppingCart } from 'react-icons/md'
+import { MdDeliveryDining, MdOutlineShoppingCart } from 'react-icons/md'
 import { Link } from 'react-router-dom'
+import { FaClock } from 'react-icons/fa'
 
 function Home() {
   const [products, setProducts] = useState<ProductFullData[] | null>(null)
@@ -23,54 +24,47 @@ function Home() {
   return (
     <div className="min-h-screen max-w-screen bg-zinc-200">
       <Navbar />
-      <div className="mt-16 px-4 py-8 max-w-7xl mx-auto md:py-16">
-        <div className="card w-full rounded-2xl p-8 sm:h-[400px]">
-          <h2 className="font-bold text-2xl sm:text-3xl text-start w-4/5">
-            Fim de semana com{' '}
-            <span className="text-orange-600 italic text-4xl sm:text-5xl">
-              entrega gratis
-            </span>
-            !!
-          </h2>
-          <p className="text-start italic font-semibold text-zinc-400 mt-8">
-            sex - sab - dom
-          </p>
+      <div className="sticky top-10 card flex flex-col items-center justify-around h-[360px] px-6 py-4 mt-10 z-0 md:h-[600px]">
+        <h2 className='font-bold text-3xl text-start'>
+          Fim de semana com {' '}
+          <span className='text-orange-500'>
+            Entrega Grátis!
+          </span>
+        </h2>
+        <div className='flex justify-between w-full text-orange-500 md:justify-center md:gap-5'>
+          <span className='flex gap-1.5 items-center'>
+            <FaClock />
+            <p className='text-white font-medium'>20 ~ 40 min</p>
+          </span>
+          <span className='flex gap-1.5 items-center'>
+            <MdDeliveryDining />
+            <p className='text-white font-medium'>Entrega Grátis</p>
+          </span>
         </div>
+      </div>
 
-        <h1 className="mt-6 font-bold text-2xl sm:text-3xl text-start text-black">
-          Nosso Cardápio
-        </h1>
-        <p className='text-md text-left text-zinc-500'>Escolha seu lanche favorito e faça o seu pedido</p>
+      <div className='relative z-10 -mt-12 bg-zinc-200 rounded-t-3xl px-4 py-10'>
+        <h2 className='text-start font-bold text-3xl text-black pl-4'>Nosso Cardápio</h2>
+        <p className='text-start text-zinc-600 pl-4'>Escolha seu lanche favorito e faça o seu pedido</p>
 
-        {/* Grid responsivo de produtos */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4">
-          {products?.map((prod) => (
-            <CardItem
-              key={prod._id}
-              title={prod.title}
-              _id={prod._id}
-              description={prod.description}
-              imageUrl={prod.imageUrl}
-              price={prod.price}
-            />
+        <div className='bg-[#EEEEEE] mt-5 rounded-xl pb-4'>
+          <div className='p-4'>
+            <h3 className='text-2xl text-orange-500 font-bold text-start'>Lanches</h3>
+            <p className='text-start text-zinc-600 text-sm'>Os mais Diversos sabores</p>
+          </div>
+
+          {products && products.map((pr) => (
+            <CardItem description={pr.description} title={pr.title} _id={pr._id} price={pr.price} />
           ))}
         </div>
       </div>
 
-      {/* Carrinho flutuante */}
-      {docs && docs.length > 0 && (
-        <div className="fixed bottom-4 right-4">
-          <span className="bg-red-600 px-2.5 py-1 text-sm rounded-full absolute left-[-5px] top-[-12px]">
-            {docs.length}
-          </span>
-          <Link
-            to={'/cart'}
-            className="bg-orange-600 block rounded-full p-5 text-2xl w-min shadow-lg"
-          >
-            <MdOutlineShoppingCart />
-          </Link>
-        </div>
-      )}
+      <Link to={'/cart'} aria-label='carrinho' className='fixed z-40 right-6 bottom-10 bg-orange-500 px-5 py-5 rounded-full text-xl shadow'>
+        <MdOutlineShoppingCart/>
+        {docs && docs.length > 0 && <span className='absolute text-xs left-0 top-0 bg-red-500 px-2 py-0.5 rounded-full'>
+          {docs.length > 0 && docs.length}
+        </span>}
+      </Link>
     </div>
   )
 }

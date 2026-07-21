@@ -1,22 +1,21 @@
 import React, { useEffect, type FormEvent} from 'react'
 import InputText from '../../components/ui/InputText'
 import MainButton from '../../components/ui/MainButton'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { FaRegCreditCard, FaRegUser } from 'react-icons/fa'
 import { MdOutlineLocalPhone, MdOutlineLock } from 'react-icons/md'
-import { useAuthentication } from '../../Hooks/useAuthentication'
+import { useAuth } from '../../context/authContext'
 
 function Register() {
     const [name, setName] = React.useState('')
     const [cpf, setcpf] = React.useState('')
     const [phone, setPhone] = React.useState('')
     const [password, setPassword] = React.useState('')
-    const [confrimPassword, setConfirmPasword] = React.useState('')
+    const [confirmPassword, setConfirmPasword] = React.useState('')
     const [errors, setErrors] = React.useState('')
 
-    const {createUser, loading, error} = useAuthentication()
+    const { createUser, loading, error} = useAuth()
 
-    const navigate = useNavigate()
 
     function maskCpfCnpj(value: string) {
         value = value.replace(/\D/g, ""); // só números
@@ -53,11 +52,12 @@ function Register() {
 
     const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setErrors('')
 
-        if(!name || !cpf || !password || !confrimPassword) return setErrors('Preencha os campos corretamente')
+        if(!name || !cpf || !password || !confirmPassword) return setErrors('Preencha os campos corretamente')
         if(name.length < 3 ) return setErrors('O nome é muito curto')
         if(name.length > 50 ) return setErrors('O nome é muito longo')
-        if(confrimPassword !== password) return setErrors('As senhas não coincidem')
+        if(confirmPassword !== password) return setErrors('As senhas não coincidem')
         if(cpf.length < 14 || cpf.length > 18 ) return setErrors('O CPF é invalido')
         if(phone && (phone.length < 14 || phone.length > 15)) return setErrors('O formato do telefone é invalido')
         if(password.length < 8) return setErrors('A senha é muito curta')
@@ -68,15 +68,11 @@ function Register() {
             phone,
             password
         }
-        console.log(data)
 
         try{
             const res = await createUser(data)
 
             console.log(res)
-            if(res){
-                navigate('/')
-            }
         } catch (error: any){
             console.error(error)
             setErrors(error)
@@ -139,7 +135,7 @@ function Register() {
                     icon={<MdOutlineLock />} 
                     placeholder='Digite a sua senha ' 
                     type='password' 
-                    value={confrimPassword}
+                    value={confirmPassword}
                     setValue={setConfirmPasword}
                     security
                 />

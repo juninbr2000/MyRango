@@ -17,6 +17,7 @@
             url('/jonathan-borba-8l8Yl2ruUsg-unsplash.jpg');
   background-size: cover;
   background-position: center;
+  z-index: 0;
 }
 
 

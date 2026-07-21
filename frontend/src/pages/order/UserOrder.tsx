@@ -22,7 +22,26 @@ function UserOrder() {
       }
     }, [document])
     
-    console.log(order)
+    useEffect(() => { 
+      BuscarPedido() 
+
+      const SearchOrder = setInterval(() => {
+        BuscarPedido()
+      }, 5000)
+
+      return () => clearInterval(SearchOrder)
+    }, [])
+
+    const BuscarPedido = async () => {
+      try {
+        const data = await axios.get(`${API_URL}order/`, {headers: {Authorization: user?.token}})
+
+        console.log(data.data)
+        setOrder(data.data)
+      } catch ( error ){
+        console.error(error)
+      }
+    } 
 
     if(loading){
       return (
