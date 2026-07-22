@@ -1,6 +1,11 @@
 const Order = require('../models/Order')
 const Address = require('../models/Address')
 const Product = require('../models/Product')
+const moongose = require('mongoose')
+const { getIO } = require("../socket/socket");
+
+
+const io = getIO
 
 exports.createOrder = async (req, res) => {
     try {
@@ -65,13 +70,34 @@ exports.getUserOrders = async (req, res) => {
 
         if (!userId) return res.status(401).json({ error: 'autenticação necessaria!' })
 
-        const orders = await Order.find({ user: userId }).sort({ createdAt: -1 }).populate('address')
+        const orders = await Order.find({ user: userId }).sort({ createdAt: -1 }).select('_id totalPrice ProductStatus paymentMethod createdAt updatedAt')
 
         res.status(200).json(orders)
 
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: error || 'Não foi possivel buscar seus pedidos' })
+    }
+}
+
+
+exports.getOneOrder = async (req, res) => {
+    try{
+        const userId = req.user?.id
+        const {id} = req.params
+
+        if(!userId) return res.status(401).json({ error: 'autenticação necessaria!' })
+
+        if(!id || !moongose.Types.ObjectId.isValid(id)) return res.status(400).json({ error: 'ID inválido!'})
+
+        const order = await Order.findOne({user: userId, _id: id})
+
+        if(!order) return res.status(404).json({ error: 'Nenhum pedido encontrado'})
+
+        res.status(200).json(order)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: error || 'Não foi possivel buscar seu pedido' })
     }
 }
 
@@ -145,6 +171,8 @@ exports.productPayment = async (req, res) => {
         if(!validStatus.includes(paymentStatus)) return res.status(400).json({error: 'O status de pagamento é invalido!'})
 
         const updatedDocument = await Order.findOneAndUpdate({ _id: id }, { $set: { paymentStatus } }, { new: true })
+
+        io.to(`order-${id}`).emit("payment-status-updated", updatedDocument);
 
         res.status(200).json(updatedDocument)
     } catch (error) {

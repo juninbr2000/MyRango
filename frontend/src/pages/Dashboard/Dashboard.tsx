@@ -6,6 +6,7 @@ import { OrderCard } from '../../components/layout/OrderCard'
 import type { Order } from '../../types/OrderTypes'
 import axios from 'axios'
 import DashboardNav from '../../components/layout/DashboardNav'
+import { useSocket } from '../../Hooks/useSocket'
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -16,34 +17,7 @@ function Dashboard() {
   const { document } = useFetchDocuments<Order[]>('order/all', '', user?.token)
 
   console.log(document)
-
-  useEffect(() => {
-    if (document) {
-      setOrder(document)
-    }
-  }, [document])
-
-  useEffect(() => {
-    BuscarPedido()
-
-    const SearchOrder = setInterval(() => {
-      BuscarPedido()
-    }, 5000)
-
-    return () => clearInterval(SearchOrder)
-  }, [])
-
-  const BuscarPedido = async () => {
-    try {
-      const data = await axios.get(`${API_URL}order/all`, { headers: { Authorization: user?.token } })
-
-      console.log(data.data)
-      setOrder(data.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
+  
   const ProductStatus = async (id: string, status: string) => {
     try {
       await axios.put(`${API_URL}order/${id}`, { ProductStatus: status }, { headers: { Authorization: user?.token } })
@@ -55,6 +29,12 @@ function Dashboard() {
       console.error(error)
     }
   }
+
+  useEffect(() => {
+    if(document){
+      setOrder(document)
+    }
+  }, [document])
 
   return (
     <div className="min-h-screen max-w-screen bg-zinc-200 pt-16">

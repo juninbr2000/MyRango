@@ -14,7 +14,7 @@ function Navbar() {
   console.log(user)
 
   return (
-    <div className='fixed top-0 left-0 flex bg-white px-4 py-2 w-screen justify-between items-center shadow z-50 md:px-12 md:py-4'>
+    <div className='fixed top-0 left-0 flex bg-white px-4 py-2 box-border w-full justify-between items-center shadow z-50 md:px-12 md:py-4'>
         <Link to={'/'}>
           <img src="/logo.svg" alt="myRango delivery" className='w-12 h-12'/>
         </Link>

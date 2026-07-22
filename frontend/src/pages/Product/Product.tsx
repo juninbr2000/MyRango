@@ -4,6 +4,8 @@ import Navbar from '../../components/layout/Navbar'
 import type { ProductFullData } from '../../types/ProductsTypes'
 import { useDocumentStorage } from '../../Hooks/useDocumentStorage'
 import { useState } from 'react'
+import { LuImageOff } from 'react-icons/lu'
+import MainButton from '../../components/ui/MainButton'
 
 function Product() {
     const { id } = useParams()
@@ -13,6 +15,8 @@ function Product() {
     const [quantity, setQuantity] = useState(1)
     const [note, setNote] = useState("")
     const navigate = useNavigate()
+
+    console.log(product)
 
     if (loading) {
         return (
@@ -39,98 +43,77 @@ function Product() {
     }
 
     const handleAddToCart = () => {
-    if (!product.available) return
-    // Aqui você pode disparar para o contexto do carrinho ou API
-    addItem({
-      _id: product._id,
-      title: product.title,
-      price: product.price,
-      amount: quantity,
-      observation:note ,
-      imageUrl: product.imageUrl
-    })
+        if (!product.available) return
+        addItem({
+            _id: product._id,
+            title: product.title,
+            price: product.price,
+            amount: quantity,
+            observation:note ,
+            imageUrl: product.imageUrl
+        })
     
-    navigate('/')
+        navigate('/')
 
-  }
+    }
+
+    const moreItem = () => {
+        setQuantity(quantity + 1)
+    }
+    const lessItem = () => {
+        if(quantity === 1) return
+        setQuantity(quantity - 1)
+    }
 
     return (
-        <div className="bg-zinc-200 min-h-screen w-screen">
+        <div className="bg-zinc-200 box-border">
             <Navbar />
-            <div className="max-w-4xl mx-auto mt-16">
-                <div className="bg-white shadow-lg overflow-hidden flex flex-col md:flex-row">
-
-                    {/* Imagem */}
-                    <div className="md:w-1/2 flex items-center justify-center bg-zinc-100">
-                        {product.imageUrl ? (
-                            <img
-                                src={product.imageUrl}
-                                alt={product.title}
-                                className="w-full h-full object-cover"
-                            />
-                        ) : (
-                            <div className="flex items-center justify-center w-full h-64 text-zinc-400 italic">
-                                Sem imagem
-                            </div>
-                        )}
+            <div className='sticky top-12 mt-12 z-0'>
+                {product.imageUrl ? 
+                    <img src={product.imageUrl} alt={product.title} className='sticky top-12'/> 
+                :
+                    <div className='bg-zinc-300 min-h-[450px] text-6xl flex items-center justify-center text-orange-500'>
+                        <LuImageOff />
                     </div>
+                }
+            </div>
 
-                    {/* Informações */}
-                    <div className="md:w-1/2 p-6 flex flex-col justify-between">
-                        <div>
-                            <h1 className="text-2xl font-bold text-zinc-800">{product.title}</h1>
-                            <p className="mt-2 text-zinc-600">{product.description}</p>
-                            <p className="mt-4 text-lg font-semibold text-orange-600">
-                                R$ {product.price.toFixed(2)}
-                            </p>
-                            {!product.available && (
-                                <p className="mt-2 text-red-500 font-medium">Indisponível no momento</p>
-                            )}
-                        </div>
+            <div className='relative z-10 -mt-12 bg-zinc-200 rounded-t-3xl px-8 py-10 box-border'>
+                <div className='flex justify-between items-center mb-4'>
+                    <h2 className='font-extrabold text-3xl text-black capitalize'>{product.title}</h2>
+                    <p className='font-bold text-3xl text-orange-500'>
+                        {product.price.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})} 
+                        <span className='text-sm font-medium'>un.</span>
+                    </p>
+                </div>
+                <p className='text-zinc-500 mb-8'>{product.description}</p>
 
-                        {/* Quantidade */}
-                        <div className="mt-6">
-                            <label className="block text-sm font-medium text-zinc-700 mb-1">
-                                Quantidade
-                            </label>
-                            <input
-                                type="number"
-                                min={1}
-                                value={quantity}
-                                onChange={(e) => setQuantity(Number(e.target.value))}
-                                className="w-20 px-2 py-1 border border-zinc-300 rounded-md text-center text-black"
-                            />
-                        </div>
-
-                        {/* Observações */}
-                        <div className="mt-4">
-                            <label className="block text-sm font-medium text-zinc-700 mb-1">
-                                Observações
-                            </label>
-                            <textarea
-                                value={note}
-                                onChange={(e) => setNote(e.target.value)}
-                                placeholder="Ex: Sem cebola, ponto da carne, etc."
-                                className="w-full px-3 py-2 border border-zinc-300 rounded-md resize-none text-black"
-                                rows={3}
-                            />
-                        </div>
-
-                        {/* Botão */}
-                        <div className="mt-6">
-                            <button
-                                disabled={!product.available}
-                                onClick={handleAddToCart}
-                                className={`w-full py-3 rounded-xl font-bold transition ${product.available
-                                        ? "bg-orange-600 text-white hover:bg-orange-700"
-                                        : "bg-zinc-400 text-zinc-700 cursor-not-allowed"
-                                    }`}
-                            >
-                                {product.available ? `Adicionar ao Carrinho - ${(product.price * quantity).toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})}` : "Indisponível"}
-                            </button>
-                        </div>
+                <div>
+                    <h3 className='font-bold text-xl text-orange-500'>Quantidade</h3>
+                    <div className='flex items-center justify-center mt-4 gap-10'>
+                        <button onClick={lessItem} className='px-5 py-3 bg-gray-100 rounded-full font-bold text-orange-500 text-2xl shadow'>-</button>
+                        <p className='text-2xl text-black font-bold'>{quantity}</p>
+                        <button onClick={moreItem} className='px-5 py-3 bg-gray-100 rounded-full font-bold text-orange-500 text-2xl shadow'>+</button>
                     </div>
+                </div>
 
+                <div className='mt-8 mb-8'>
+                    <h3 className='font-bold text-xl text-orange-500'>Observação:</h3>
+                    <textarea 
+                        name="notes" 
+                        value={note} 
+                        onChange={(e) => setNote(e.target.value)} 
+                        placeholder='Sem cebola, sem tomate ... (opcional)'
+                        className='bg-gray-100 border rounded-md w-full mt-4 resize-none text-black border-gray-300 px-3 py-2 shadow'
+                    />
+                </div>
+
+                <div className='flex justify-between items-center'>
+                    <div>
+                        <p className='text-gray-500 text-start'>Total:</p>
+                        <span className='font-bold text-xl text-orange-500'>{(product.price * quantity).toLocaleString('pt-br', {style: 'currency', currency: "BRL"})}</span>
+                    </div>
+                    <MainButton classe='primary' title='Adicionar ao Carrinho' type='button' onPress={handleAddToCart} />
                 </div>
             </div>
         </div>

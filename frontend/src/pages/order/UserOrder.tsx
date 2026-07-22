@@ -13,8 +13,6 @@ function UserOrder() {
     const {document, loading} = useFetchDocuments<Order[]>('order', '', user?.token)
     
     const [order, setOrder] = useState<Order[]>([])
-    
-    console.log(document)
 
     useEffect(() => {
       if(document){
@@ -22,26 +20,6 @@ function UserOrder() {
       }
     }, [document])
     
-    useEffect(() => { 
-      BuscarPedido() 
-
-      const SearchOrder = setInterval(() => {
-        BuscarPedido()
-      }, 5000)
-
-      return () => clearInterval(SearchOrder)
-    }, [])
-
-    const BuscarPedido = async () => {
-      try {
-        const data = await axios.get(`${API_URL}order/`, {headers: {Authorization: user?.token}})
-
-        console.log(data.data)
-        setOrder(data.data)
-      } catch ( error ){
-        console.error(error)
-      }
-    } 
 
     if(loading){
       return (
