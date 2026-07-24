@@ -11,13 +11,11 @@ import { FaClock } from 'react-icons/fa'
 function Home() {
   const [products, setProducts] = useState<ProductFullData[] | null>(null)
   const {docs} = useDocumentStorage('cart')
-  
-  console.log(docs)
+
 
   const {loading, error, document} = useFetchDocuments<ProductFullData[]>('product') 
 
   useEffect(() => {
-    console.log(document)
     setProducts(document)
   }, [document, loading, error])
 

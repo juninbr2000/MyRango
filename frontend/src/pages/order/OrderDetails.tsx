@@ -2,11 +2,42 @@ import { useFetchDocuments } from '../../Hooks/usefetchDocuments'
 import { useParams } from 'react-router-dom'
 import { useAuth } from '../../context/authContext'
 import type { Order } from '../../types/OrderTypes'
+import Navbar from '../../components/layout/Navbar'
+import { useEffect, useState } from 'react'
+import { socket } from '../../services/Socket'
 
 function OrderDetails() {
   const { id } = useParams()
   const {user} = useAuth()
   const {document, loading, error} = useFetchDocuments<Order>('order', id, user?.token)
+
+  const [order, setOrder] = useState<Order>()
+
+  useEffect(() => {
+    if(document){
+      setOrder(document)
+    }
+  }, [document])
+
+  useEffect(() => {
+    if (!id) return;
+
+    socket.emit("join-order", id);
+
+    return () => {
+      socket.emit("leave-order", id);
+    };
+  }, [id]);
+
+  useEffect(() => {
+    socket.on("status-changed", (updatedOrder) => {
+        setOrder(updatedOrder);
+    });
+
+    return () => {
+        socket.off("status-changed");
+    };
+  }, []);
 
   if(loading){
     return (
@@ -16,7 +47,7 @@ function OrderDetails() {
     )
   }
 
-  if(!document) {
+  if(!order) {
     return (
       <div className='min-h-screen bg-zinc-200 flex flex-col items-center justify-center text-black box-border'>
         <p className='font-bold text-2xl text-red'>Erro ao buscar Dados</p>
@@ -25,17 +56,17 @@ function OrderDetails() {
     )
   }
   
-  const OrderAt = new Date(document?.createdAt).toLocaleDateString('pt-br', { day: '2-digit', month: 'short', year: 'numeric'})
-  const OrderTime = new Date(document?.createdAt).toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit'})
-  const updatedTime = new Date(document?.updatedAt).toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit'})
+  const OrderAt = new Date(order.createdAt).toLocaleDateString('pt-br', { day: '2-digit', month: 'short', year: 'numeric'})
+  const OrderTime = new Date(order.createdAt).toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit'})
+  const updatedTime = new Date(order.updatedAt).toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit'})
 
-  const ProductStatus = document?.ProductStatus === 'pending' ? (
+  const ProductStatus = order.ProductStatus === 'pending' ? (
     <p className="shadow text-start block text-xs font-bold px-5 rounded py-2 bg-yellow-100 text-yellow-500">Pendente</p>
-  ) : document?.ProductStatus === 'processing' ? (
+  ) : order.ProductStatus === 'processing' ? (
     <p className="shadow text-start block text-xs font-bold px-5 rounded py-2 bg-orange-100 text-orange-500">Processando</p>
-  ) : document?.ProductStatus === 'shipped' ? (
+  ) : order.ProductStatus === 'shipped' ? (
     <p className="shadow text-start block text-xs font-bold px-5 rounded py-2 bg-blue-200 text-blue-600">Enviado</p>
-  ) : document?.ProductStatus === 'delivered' ? (
+  ) : order.ProductStatus === 'delivered' ? (
     <p className="shadow text-start block text-xs font-bold px-5 rounded py-2 bg-green-100 text-green-500">Entregue</p>
   ) : (
     <p className="shadow text-start block text-xs font-bold px-5 rounded py-2 bg-red-100 text-red-500">Cancelado</p>
@@ -43,8 +74,9 @@ function OrderDetails() {
 
   return (
     <div className='min-h-screen bg-zinc-200 flex flex-col items-center justify-center text-black box-border'>
-      {document && <>
-      <div className='w-[90%]'>
+      <Navbar />
+      {order && <>
+      <div className='w-[90%] mt-20'>
         <h2 className='text-4xl font-bold text-start mb-2'>Detalhes do Pedido</h2>
         <p className='text-xs text-zinc-500 text-start'>#{id}</p>
         <div className='flex items-center justify-between mt-4'>
@@ -68,8 +100,8 @@ function OrderDetails() {
         <div className='mb-5'>
           <h3 className='text-md text-xl font-bold text-zinc-500 text-start'>Endereço:</h3>
           <div className='mt-2'>
-            <p className='font-medium text-sm'>{document?.address.rua}, nº {document?.address.complemento}</p>
-            <p className='font-medium text-sm'>{document?.address.bairro} - {document?.address.cidade}</p>
+            <p className='font-medium text-sm'>{order.address.rua}, nº {order.address.complemento}</p>
+            <p className='font-medium text-sm'>{order.address.bairro} - {order.address.cidade}</p>
           </div>
         </div>
         <div>
@@ -78,13 +110,13 @@ function OrderDetails() {
             <div className='flex justify-between'>
               <p className=' text-zinc-500'>Metodo de pagamento:</p>
               <span className='text-orange-500 font-semibold'>
-                {document?.paymentMethod}
+                {order.paymentMethod}
               </span>
             </div>
             <div className='flex justify-between'>
               <p className=' text-zinc-500'>Status do pagamento:</p>
               <span className='text-orange-500 font-semibold'>
-                {document?.paymentStatus === 'paid' ? 'Pago' : 'Pendente'}
+                {order.paymentStatus === 'paid' ? 'Pago' : 'Pendente'}
               </span>
             </div>
           </div>
@@ -93,7 +125,7 @@ function OrderDetails() {
       
       <div className='w-[90%] px-4 py-6'>
         <h3 className='text-md text-xl font-bold text-zinc-500 text-start'>Produtos</h3>
-        {document && document.products.map((prod) => (
+        {order && order.products.map((prod) => (
           <div key={prod._id} className='flex justify-between py-2'>
             <div className='flex gap-2 items-center'>
               <span className='font-bold text-orange-500 text-lg'>{prod.quantity}X</span>
@@ -104,7 +136,7 @@ function OrderDetails() {
         ))}
         <div className='flex justify-between border-t py-4'>
           <p className='font-bold text-lg text-zinc-500'>Total:</p>
-          <p className='font-bold text-orange-500 text-lg'>{document?.totalPrice.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})}</p>
+          <p className='font-bold text-orange-500 text-lg'>{order.totalPrice.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})}</p>
         </div>
       </div>
       </>}

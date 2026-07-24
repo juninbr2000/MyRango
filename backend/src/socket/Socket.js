@@ -1,7 +1,10 @@
 const { Server } = require("socket.io");
 
+let io
+console.log("Socket module carregado", __filename);
 function initializeSocket(server) {
-  const io = new Server(server, {
+  console.log('iniciando socket')
+  io = new Server(server, {
     cors: {
       origin: [
         "http://localhost:5173",
@@ -11,10 +14,18 @@ function initializeSocket(server) {
   });
 
   io.on("connection", (socket) => {
-    console.log("Cliente conectado:", socket.id);
+    console.log("Cliente conectado");
 
-    socket.on("disconnect", () => {
-      console.log("Cliente desconectado:", socket.id);
+    socket.on("join-order", (orderId) => {
+      socket.join(`order-${orderId}`);
+
+      console.log(`Entrou na sala order-${orderId}`);
+    });
+    
+    socket.on("leave-order", (orderId) => {
+      socket.leave(`order-${orderId}`);
+      
+      console.log(`Saiu da sala order-${orderId}`);
     });
   });
 

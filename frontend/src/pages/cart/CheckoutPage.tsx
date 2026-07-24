@@ -52,7 +52,7 @@ export default function CheckoutPage() {
 
       if(res){
         clear()
-        navigate('/order')
+        navigate(`/payment/${res.data._id}`)
       }
     } catch (error) {
       console.error(error)

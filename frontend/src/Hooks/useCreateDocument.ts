@@ -13,9 +13,9 @@ export const useCreateDocument = (doc: string, token: string) => {
         setLoading(true)
 
         try{
-            await axios.post(`${URL}${doc}`, data, {headers: {Authorization: token}})
+            const res = await axios.post(`${URL}${doc}`, data, {headers: {Authorization: token}})
 
-            return true
+            return res
         } catch (err){
             const axiosError = err as AxiosError<{ error: string }>;
             console.error(err);

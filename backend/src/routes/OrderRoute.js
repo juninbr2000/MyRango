@@ -7,8 +7,8 @@ const router = express.Router()
 router.post('/', authMiddleware, createOrder)
 router.put('/:id', authMiddleware, updateProductStatus)
 router.get('/', authMiddleware, getUserOrders)
-router.get('/:id', authMiddleware, getOneOrder)
 router.get('/all', authMiddleware, getAllOrders)
+router.get('/:id', authMiddleware, getOneOrder)
 router.put('/pay/:id', authMiddleware, productPayment)
 
 module.exports = router

@@ -14,11 +14,11 @@ import UserOrder from './pages/order/UserOrder'
 import CheckoutPage from './pages/cart/CheckoutPage'
 import Dashboard from './pages/Dashboard/Dashboard'
 import OrderDetails from './pages/order/OrderDetails'
+import PaymentPage from './pages/cart/PaymentPage'
 
 function App() {
 
   const { user } = useAuth()
-  console.log(user)
 
   // if(loading){
   //   return (
@@ -42,6 +42,7 @@ function App() {
 
       <Route path='/order' element={user ? <UserOrder /> : <Login />} />
       <Route path='/order/:id' element={user ? <OrderDetails /> : <Login />} />
+      <Route path='/payment/:id' element={user ? <PaymentPage /> : <Login />} />
 
 
       <Route path='/login' element={!user ? <Login /> : <Home/> } />

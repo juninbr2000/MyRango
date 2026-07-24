@@ -5,7 +5,6 @@ import { Link } from "react-router-dom"
 
 interface Props {
   order: Order,
-  simulatePayment: (id: string) => void,
   dashboard?: boolean,
   productStatus?: (id: string, status: string) => void
 }

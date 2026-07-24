@@ -11,7 +11,6 @@ function Navbar() {
 
   const { user, logout } = useAuth()
   const navigate = useNavigate()
-  console.log(user)
 
   return (
     <div className='fixed top-0 left-0 flex bg-white px-4 py-2 box-border w-full justify-between items-center shadow z-50 md:px-12 md:py-4'>

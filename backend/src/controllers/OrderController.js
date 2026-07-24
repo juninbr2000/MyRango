@@ -2,10 +2,7 @@ const Order = require('../models/Order')
 const Address = require('../models/Address')
 const Product = require('../models/Product')
 const moongose = require('mongoose')
-const { getIO } = require("../socket/socket");
-
-
-const io = getIO
+const { getIO } = require('../socket/socket')
 
 exports.createOrder = async (req, res) => {
     try {
@@ -90,7 +87,7 @@ exports.getOneOrder = async (req, res) => {
 
         if(!id || !moongose.Types.ObjectId.isValid(id)) return res.status(400).json({ error: 'ID inválido!'})
 
-        const order = await Order.findOne({user: userId, _id: id})
+        const order = await Order.findOne({user: userId, _id: id}).populate('address')
 
         if(!order) return res.status(404).json({ error: 'Nenhum pedido encontrado'})
 
@@ -126,6 +123,11 @@ exports.updateProductStatus = async (req, res) => {
         }
 
         const updatedDocument = await Order.findOneAndUpdate({ _id: id }, { $set: { ProductStatus } }, { new: true })
+
+        const io = getIO()
+
+        const roomName = `order-${id}`
+        io.to(roomName).emit('status-changed', updatedDocument)
 
         res.status(200).json(updatedDocument)
 
@@ -170,9 +172,12 @@ exports.productPayment = async (req, res) => {
         const validStatus = ['pending', 'paid', 'failed']
         if(!validStatus.includes(paymentStatus)) return res.status(400).json({error: 'O status de pagamento é invalido!'})
 
-        const updatedDocument = await Order.findOneAndUpdate({ _id: id }, { $set: { paymentStatus } }, { new: true })
+        const updatedDocument = await Order.findOneAndUpdate({ _id: id, user: userId }, { $set: { paymentStatus } }, { new: true })
+        
+        const io = getIO()
 
-        io.to(`order-${id}`).emit("payment-status-updated", updatedDocument);
+        const roomName = `order-${id}`
+        io.to(roomName).emit('payment', updatedDocument)
 
         res.status(200).json(updatedDocument)
     } catch (error) {
