@@ -8,13 +8,13 @@ import Home from './pages/Home/Home'
 import { useAuth } from './context/authContext'
 import Product from './pages/Product/Product'
 import AddressView from './pages/address/AddressView'
-import CreateAddress from './pages/address/CreateAddress'
 import CartView from './pages/cart/CartView'
 import UserOrder from './pages/order/UserOrder'
 import CheckoutPage from './pages/cart/CheckoutPage'
 import Dashboard from './pages/Dashboard/Dashboard'
 import OrderDetails from './pages/order/OrderDetails'
 import PaymentPage from './pages/cart/PaymentPage'
+import CreateOrEditAddress from './pages/address/CreateAddress'
 
 function App() {
 
@@ -35,7 +35,8 @@ function App() {
       <Route path='/:id' element={<Product />} />
 
       <Route path='/address' element={user ? <AddressView /> : <Login />} />
-      <Route path='/address/create' element={user ? <CreateAddress /> : <Login />} />
+      <Route path='/address/create' element={user ? <CreateOrEditAddress /> : <Login />} />
+      <Route path="/address/edit/:id" element={user ? <CreateOrEditAddress /> : <Login />} />
 
       <Route path='/cart' element={user ? <CartView /> : <Login />} />
       <Route path='/finish' element={user ? <CheckoutPage /> : <Login />} />

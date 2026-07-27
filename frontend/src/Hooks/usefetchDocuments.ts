@@ -22,7 +22,6 @@ export const useFetchDocuments = <T>(doc: string, uid?: string, token?: string) 
                 const resp = await axios.get(url, config)
 
                 setDocument(resp.data)
-                console.log(resp.data)
 
             } catch (err) {
                 const axiosError = err as AxiosError<{ error: string }>;

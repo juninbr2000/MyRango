@@ -47,6 +47,26 @@ exports.getAddress = async (req, res) => {
     }
 }
 
+exports.getOneAddress = async (req, res) => {
+    try {
+        const userId = req.user?.id
+        const { id } = req.params
+
+        if(!userId) return res.status(401).json( {error: 'Autenticação necessaria!'} )
+        
+        if(!id) return res.status(400).json( {error: 'ID inválido!'} )
+        
+        const address = await Address.findOne({createdBy: userId, _id: id})
+
+        if(!address) return res.status(404).json({error: 'Endereço não encontrado!'})
+        
+        res.status(200).json(address)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({error: error || 'Não foi possivel atualizar o endereço'})
+    }
+}
+
 exports.editAddress = async (req, res) => {
     try {
         const {cidade, cep, rua, complemento, referencia, bairro} = req.body

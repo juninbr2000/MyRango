@@ -87,7 +87,7 @@ exports.getOneOrder = async (req, res) => {
 
         if(!id || !moongose.Types.ObjectId.isValid(id)) return res.status(400).json({ error: 'ID inválido!'})
 
-        const order = await Order.findOne({user: userId, _id: id}).populate('address')
+        const order = await Order.findOne({user: userId, _id: id})
 
         if(!order) return res.status(404).json({ error: 'Nenhum pedido encontrado'})
 
