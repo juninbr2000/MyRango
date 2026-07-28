@@ -27,7 +27,7 @@ export default function Navbar() {
             <img 
               src="/logo.svg" 
               alt="myRango delivery" 
-              className="w-10 h-10 object-contain transition-transform group-hover:scale-105" 
+              className="w-30 h-10 object-contain transition-transform group-hover:scale-105" 
             />
             <span className="hidden sm:inline font-black text-xl tracking-tight text-zinc-900">
               my<span className="text-orange-500">Rango</span>

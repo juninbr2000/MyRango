@@ -27,7 +27,7 @@ function OrderDetails() {
   useEffect(() => {
     if (!id) return
 
-    socket.emit('join-order', id)
+    socket.emit('join-room', `order-${id}`)
 
     const handleStatusChange = (updatedOrder: Order) => {
       setOrder(updatedOrder)
@@ -36,7 +36,7 @@ function OrderDetails() {
     socket.on('status-changed', handleStatusChange)
 
     return () => {
-      socket.emit('leave-order', id)
+      socket.emit('leave-room', `order-${id}`)
       socket.off('status-changed', handleStatusChange)
     }
   }, [id])

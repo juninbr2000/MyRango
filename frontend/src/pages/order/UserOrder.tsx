@@ -32,12 +32,12 @@ function UserOrder() {
     );
 
     activeOrders.forEach(o =>
-      socket.emit("join-order", o._id)
+      socket.emit("join-room", `order-${o._id}`)
     );
 
     return () => {
       activeOrders.forEach(o =>
-        socket.emit("leave-order", o._id)
+        socket.emit("leave-room", `order-${o._id}`)
       );
     };
   }, [document]);
@@ -76,9 +76,9 @@ function UserOrder() {
         {/* Header da Página */}
         <div className="flex items-center gap-3 mb-6">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/')}
             className="p-2 bg-white rounded-xl text-zinc-600 hover:text-black hover:bg-zinc-100 transition-colors shadow-xs"
-            aria-label="Voltar"
+            aria-label="Voltar ao Início"
           >
             <FaArrowLeft />
           </button>
