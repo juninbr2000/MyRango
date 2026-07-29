@@ -12,9 +12,9 @@ import { FaMagnifyingGlass } from 'react-icons/fa6'
 function Home() {
   const [products, setProducts] = useState<ProductFullData[] | null>(null)
   const [search, setSearch] = useState('')
-  
-  const {docs} = useDocumentStorage('cart')
-  const {loading, error, document} = useFetchDocuments<ProductFullData[]>('product') 
+
+  const { docs } = useDocumentStorage('cart')
+  const { loading, error, document } = useFetchDocuments<ProductFullData[]>('product')
 
   useEffect(() => {
     setProducts(document)
@@ -24,13 +24,23 @@ function Home() {
     pr.title.toLowerCase().includes(search.toLowerCase())
   )
 
-return (
+  const groupedProducts = filteredProducts?.reduce((acc, product) => {
+    if (!acc[product.category]) {
+      acc[product.category] = [];
+    }
+
+    acc[product.category].push(product);
+
+    return acc;
+  }, {} as Record<string, ProductFullData[]>);
+
+  return (
     <div className="min-h-screen bg-zinc-200 text-black pb-24">
       <Navbar />
 
       <div className="card relative mt-16 bg-gradient-to-br from-zinc-900 via-zinc-800 to-black text-white px-6 pt-20 pb-16 rounded-b-3xl shadow-md">
         <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
-          
+
           <span className="bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
             Promoção Especiais
           </span>
@@ -57,7 +67,7 @@ return (
       {/* Seção Principal / Cardápio */}
       <main className="max-w-4xl mx-auto px-4 -mt-6 relative z-10">
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-zinc-200/80">
-          
+
           {/* Header da Seção + Busca */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div>
@@ -83,30 +93,37 @@ return (
           </div>
 
           {/* Categoria: Lanches */}
-          <div className="border-t border-zinc-100 pt-6">
-            <div className="mb-4">
-              <h3 className="text-xl font-extrabold text-orange-500">Lanches</h3>
-              <p className="text-xs text-zinc-400">Os mais diversos sabores e tamanhos</p>
-            </div>
+          <div className="pt-2">
 
             {/* Lista de Produtos em Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {filteredProducts && filteredProducts.length > 0 ? (
-                filteredProducts.map((pr) => (
-                  <CardItem
-                    key={pr._id}
-                    _id={pr._id}
-                    title={pr.title}
-                    description={pr.description}
-                    price={pr.price}
-                    imageUrl={pr.imageUrl}
-                  />
-                ))
-              ) : (
-                <div className="col-span-full py-12 text-center text-zinc-400">
-                  Nenhum produto encontrado.
-                </div>
-              )}
+              {groupedProducts &&
+                Object.entries(groupedProducts).map(([category, products]) => (
+                  <div key={category} className="border-t border-zinc-100 pt-6 mb-8">
+                    <div className="mb-4">
+                      <h3 className="text-xl capitalize font-extrabold text-orange-500">
+                        {category}
+                      </h3>
+
+                      <p className="text-xs text-zinc-400">
+                        {products.length} itens disponíveis
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {products.map((pr) => (
+                        <CardItem
+                          key={pr._id}
+                          _id={pr._id}
+                          title={pr.title}
+                          description={pr.description}
+                          price={pr.price}
+                          imageUrl={pr.imageUrl}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         </div>

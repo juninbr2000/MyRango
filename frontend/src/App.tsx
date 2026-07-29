@@ -15,6 +15,8 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import OrderDetails from './pages/order/OrderDetails'
 import PaymentPage from './pages/cart/PaymentPage'
 import CreateOrEditAddress from './pages/address/CreateAddress'
+import DashboardProducts from './pages/Dashboard/DashboardProducts'
+import DashboardFormProduct from './pages/Dashboard/DashboardFormProduct'
 
 function App() {
 
@@ -50,6 +52,9 @@ function App() {
       <Route path='/register' element={!user ? <Register /> : <Home/> } />
 
       <Route path='/dashboard' element={!user ? <Login /> : <Dashboard/> } />
+      <Route path='/dashboard/products' element={!user ? <Login /> : <DashboardProducts/> } />
+      <Route path='/dashboard/create' element={!user ? <Login /> : <DashboardFormProduct/> } />
+      <Route path='/dashboard/:id' element={!user ? <Login /> : <DashboardFormProduct/> } />
     </Routes>
   )
 }

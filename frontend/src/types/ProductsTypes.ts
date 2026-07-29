@@ -15,7 +15,8 @@ export interface ProductFullData {
     price: number,
     imageUrl?: string,
     amount?: number,
-    createdBy: string
+    createdBy: string,
+    category: string
 }
 
 export interface ProductOrder {
