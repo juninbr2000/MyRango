@@ -37,8 +37,6 @@ exports.createOrder = async (req, res) => {
             }
         })
 
-        console.log(productsData)
-
         const totalPrice = productsData.reduce((sum, p) => sum + (p.priceAtTimeOfPurchase * p.quantity), 0)
 
         const order = new Order({
@@ -51,9 +49,12 @@ exports.createOrder = async (req, res) => {
             paymentStatus: 'pending'
         })
 
-        await order.save()
+        const createdOrder = await order.save()
+        const io = getIO()
 
-        res.status(201).json(order)
+        io.to('admin').emit('new-order', createdOrder)
+
+        res.status(201).json(createdOrder)
 
     } catch (error) {
         console.error(error)

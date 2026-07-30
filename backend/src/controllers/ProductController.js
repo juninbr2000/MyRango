@@ -14,13 +14,13 @@ exports.createProduct = async (req, res) => {
             return res.status(403).json({ error: 'Somente administradores podem fazer essa soliciatação'})
         }
         
-        const {title, description, available, price, imageUrl, amount} = req.body
+        const {title, description, available, category, price, imageUrl, amount} = req.body
 
         if(!title || !price || !available ){
             return res.status(400).json({error: 'Campos obrigatorios não foram preenchidos! '})
         }
 
-        const product = new Product({title, description, available, price, imageUrl, amount, createdBy: userId})
+        const product = new Product({title, description, available, price, category, imageUrl, amount, createdBy: userId})
 
         await product.save()
 
@@ -37,7 +37,7 @@ exports.updateProduct = async (req, res) => {
 
         const userId = req.user?.id
 
-        const {title, description, available, price, imageUrl, amount} = req.body
+        const {title, description, available, category, price, imageUrl, amount} = req.body
 
         const isAdmin = req.user?.role
 
@@ -60,6 +60,7 @@ exports.updateProduct = async (req, res) => {
             description,
             available,
             price,
+            category,
             imageUrl,
             amount
         }

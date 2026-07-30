@@ -16,16 +16,16 @@ function initializeSocket(server) {
   io.on("connection", (socket) => {
     console.log("Cliente conectado");
 
-    socket.on("join-order", (orderId) => {
-      socket.join(`order-${orderId}`);
+    socket.on("join-room", (room) => {
+      socket.join(`${room}`);
 
-      console.log(`Entrou na sala order-${orderId}`);
+      console.log(`Entrou na sala ${room}`);
     });
     
-    socket.on("leave-order", (orderId) => {
-      socket.leave(`order-${orderId}`);
+    socket.on("leave-room", (room) => {
+      socket.leave(`${room}`);
       
-      console.log(`Saiu da sala order-${orderId}`);
+      console.log(`Saiu da sala ${room}`);
     });
   });
 

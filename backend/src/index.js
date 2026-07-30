@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose');
 const http = require("http");
+const helmet = require("helmet")
 require('dotenv').config()
 
 const app = express()
@@ -12,7 +13,14 @@ app.use(cors(
     ]
   }
 ))
-app.use(express.json())
+
+app.use(express.json(
+  {
+    limit: '1mb'
+  }
+))
+
+app.use(helmet())
 
 const PORT = process.env.PORT || 3000
 
