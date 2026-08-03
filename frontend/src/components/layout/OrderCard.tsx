@@ -59,7 +59,7 @@ export const OrderCard: React.FC<Props> = ({ order }) => {
             Entregue
           </span>
         )
-      default:
+      case 'cancelled':
         return (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-200/60">
             <FaXmark className="text-[10px]" />

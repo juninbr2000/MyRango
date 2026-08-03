@@ -125,7 +125,7 @@ function Dashboard() {
             { id: 'processing', label: 'Em Preparo' },
             { id: 'shipped', label: 'Saiu p/ Entrega' },
             { id: 'delivered', label: 'Entregues' },
-            { id: 'canceled', label: 'Cancelados' },
+            { id: 'cancelled', label: 'Cancelados' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -221,7 +221,7 @@ function Dashboard() {
                       <option value="processing">Em Preparo</option>
                       <option value="shipped">Saiu p/ Entrega</option>
                       <option value="delivered">Entregue</option>
-                      <option value="canceled">Cancelado</option>
+                      <option value="cancelled">Cancelado</option>
                     </select>
                     <FaChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] pointer-events-none opacity-60" />
                   </div>
